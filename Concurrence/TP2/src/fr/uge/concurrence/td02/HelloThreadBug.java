@@ -10,7 +10,8 @@ Exécuter le programme plusieurs fois et noter les différents affichages.
 13808
 
 Expliquer comment la taille de la liste peut être plus petite que le nombre total d'appels à la méthode add.
-A cause de l'opimisation de code de java.
+Un probleme de de-scheduler, une ancienne version de list peut remplacé la version actuelle,
+donc on perd des valeurs de la liste.
  */
 public class HelloThreadBug {
     public static void main(String[] args) throws InterruptedException {
