@@ -25,12 +25,12 @@ public class StreamEditor {
 
     public StreamEditor() {
         this.cmdDelete = new LineDeleteCommand(0);
-        this.cmdPattern = new PatternCommand(Pattern.compile(""));
+        this.cmdPattern = new PatternCommand(Pattern.compile(" "));
     }
 
     private Action getOrder(LineNumberReader text, String current) {
         var match = cmdPattern.pattern().matcher(current);
-        if (text.getLineNumber() != cmdDelete.line() && !match.matches()) {
+        if (text.getLineNumber() != cmdDelete.line() && !match.find()) {
             return Action.PRINT;
         } else {
             return Action.DELETE;

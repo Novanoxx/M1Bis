@@ -1,4 +1,6 @@
 package fr.uge.sed;
 
-public interface Command {
+@FunctionalInterface
+public interface Command<T, U, V> {
+    V getOrder(T t, U u);
 }
