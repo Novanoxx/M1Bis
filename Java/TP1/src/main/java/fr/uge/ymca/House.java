@@ -2,15 +2,17 @@ package fr.uge.ymca;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
 public final class House {
-	private final HashMap<People, Boolean> lst = new HashMap<>();
+	private final ArrayList<People> lst = new ArrayList<>();
+	private final HashSet<Kind> discounted = new HashSet<>();
 
 	public void add(People people) {
 		Objects.requireNonNull(people);
-		lst.put(people, false);
+		lst.add(people);
 	}
 	
 	public double averagePrice() {
@@ -21,7 +23,13 @@ public final class House {
 		for (var people : lst) {
 			//avg += people.price();
 			switch(people) {
-			case VillagePeople village -> avg += 100;
+			case VillagePeople village -> {
+				if (discounted.contains(village.kind())) {
+					avg += 20;
+				} else {
+					avg += 100;
+				}
+			}
 			case Minion minion -> avg += 1;
 			}
 		}
@@ -30,7 +38,14 @@ public final class House {
 	
 	public void addDiscount(Kind kind) {
 		Objects.requireNonNull(kind);
-		
+		discounted.add(kind);
+	}
+
+	public void removeDiscount(Kind kind) {
+		Objects.requireNonNull(kind);
+		if (!discounted.remove(kind)) {
+			throw new IllegalStateException();
+		}
 	}
 	
 	/*
@@ -56,7 +71,7 @@ public final class House {
 		if (lst.isEmpty()) {
 			return "Empty House";
 		}
-		return "House with " + lst.stream().map(e -> e.name()).sorted().collect(Collectors.joining(", "));
+		return "House with " + lst.stream().map(People::name).sorted().collect(Collectors.joining(", "));
 	}
 	
 	

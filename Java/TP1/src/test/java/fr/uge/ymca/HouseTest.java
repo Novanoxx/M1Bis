@@ -293,7 +293,6 @@ public class HouseTest {
     }
   }
 
-/*
   @Nested
   public class Q9 {
     @Test
@@ -323,7 +322,7 @@ public class HouseTest {
       );
     }
   }
-
+/*
   @Nested
   public class Q10 {
     @Test

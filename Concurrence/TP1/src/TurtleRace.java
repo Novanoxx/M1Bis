@@ -1,3 +1,11 @@
+/*
+Observer l'évolution du nombre de threads. Que devient le thread main ?
+Le thread main s'arrete lorsqu'elle a fini de créer tout les threads.
+
+Quand est-ce que la JVM s'éteint ?
+la JVM s'éteint lorsque tout les threads ont fini de tourné.
+ */
+
 public class TurtleRace {
     public static void main(String[] args) throws InterruptedException {
         System.out.println("On your mark!");
