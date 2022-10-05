@@ -30,7 +30,18 @@ public void transform(LineNumberReader text, Writer write) {
    <br>Vérifier que les tests JUnit marqués "Q2" passent.
 
 <b>Réponse:</b>
-Après avoir créé un record LineDeleteCommand, <i>transform</i> est modifié en : 
+Après avoir créé un record LineDeleteCommand:
+```
+public record LineDeleteCommand(int line) {
+    public LineDeleteCommand {
+        if (line < 0) {
+            throw new IllegalArgumentException();
+        }
+    }
+}
+
+```
+<i>transform</i> est modifié en : 
 ```
 public void transform(LineNumberReader text, Writer write) {
     Objects.requireNonNull(text);
@@ -79,8 +90,8 @@ public static void main(String[] args) {
 
 <b>Réponse:</b> Après avoir ajouté l'enum dans la classe StreamEditor, la méthode <i>getOrder</i> permettra de contenir toutes les conditions qui permettront de renvoyer DELETE/PRINT. 
 ```
-private Action getOrder(LineNumberReader text) {
-   if (text.getLineNumber() != cmdDelete.line()) {
+private Action getOrder(int numLine) {
+   if (numLine != cmdDelete.line()) {
       return Action.PRINT;
    } else {
       return Action.DELETE;
@@ -97,11 +108,19 @@ private Action getOrder(LineNumberReader text) {
    Faite les changements qui s'imposent puis vérifier que les tests JUnit marqués "Q5" passent.
    Rappel : pour voir si un texte contient un motif pattern, on instancie un Matcher du motif sur le texte et on utilise la méthode find sur ce Matcher.
 
-<b>Réponse:</b>
+<b>Réponse:</b> J'ai introduit un record qui aura le même rôle que LineDeleteCommand, excepté qu'il sera sur les patterns:
 ```
-private Action getOrder(LineNumberReader text, String current) {
+public record PatternCommand(Pattern pattern) {
+    public PatternCommand {
+        Objects.requireNonNull(pattern);
+    }
+}
+```
+<i>transform</i> sera donc modifié en conséquence:
+```
+private Action getOrder(int numLine, String current) {
    var match = cmdPattern.pattern().matcher(current);
-   if (text.getLineNumber() != cmdDelete.line() && !match.find()) {
+   if (numLine != cmdDelete.line() && !match.find()) {
       return Action.PRINT;
    } else {
       return Action.DELETE;
@@ -111,3 +130,61 @@ private Action getOrder(LineNumberReader text, String current) {
 6. En fait, cette implantation n'est pas satisfaisante, car les records LineDeleteCommand et FindAndDeleteCommand ont beaucoup de code qui ne sert à rien. Il serait plus simple de les transformer en lambdas, car la véritable information intéressante est comment effectuer la transformation d'une ligne.
    Modifier votre code pour que les implantations des commandes renvoyées par les méthodes lineDelete et findAndDelete soit des lambdas.
    <br>Vérifier que les tests JUnit marqués "Q6" passent
+
+<b>Réponse:</b> J'ai créer une interface fonctionnelle Command dans StreamEditor et enlevé toute utilisation des record créés précédemment.
+```
+@FunctionalInterface
+public interface Command {
+   Action action(String current, int numLine);
+}
+
+private final Command cmd;
+public StreamEditor(Command cmd) {
+   Objects.requireNonNull(cmd);
+   this.cmd = cmd;
+}
+
+public StreamEditor() {
+   this.cmd = lineDelete(0);
+}
+
+public void transform(LineNumberReader text, Writer write) throws IOException {
+   Objects.requireNonNull(text);
+   Objects.requireNonNull(write);
+   var current = text.readLine();
+   while (current != null) {
+      //if (text.getLineNumber() != delete.line()) {
+      //if (getOrder(text.getLineNumber(), current).equals(Action.PRINT)) {
+      if (cmd.action(current, text.getLineNumber()).equals(Action.PRINT)) {
+          write.append(current).append("\n");
+      }
+      current = text.readLine();
+   }
+}
+
+public static Command lineDelete(int num) {
+   if (num < 0) {
+      throw new IllegalArgumentException();
+   }
+   return (current, numLine) -> num != numLine ? Action.PRINT : Action.DELETE;
+}
+
+public static Command findAndDelete(Pattern pattern) {
+   Objects.requireNonNull(pattern);
+   return (current, numLine) -> pattern.matcher(current).find() ? Action.DELETE : Action.PRINT;
+}
+```
+
+7. On souhaite maintenant introduire une commande substitute(pattern, replacement) qui dans une ligne remplace toutes les occurrences du motif par une chaîne de caractère de remplacement. Malheureusement, notre enum Action n'est pas à même de gérer ce cas, car il faut que la commande puisse renvoyer PRINT mais avec une nouvelle ligne.
+On se propose pour cela de remplacer l'enum Action par une interface et DELETE et PRINT par des records implantant cette interface comme ceci:
+   ```
+   private interface Action {
+      record DeleteAction() implements Action {}
+      record PrintAction(String text) implements Action {}
+   }
+   ```
+   Modifier votre code sans introduire pour l'instant la commande substitute pour utiliser l'interface Action au lieu de l'enum.
+   <br>Vérifier que les tests JUnit marqués "Q7" passent.
+   <br>Rappel : on peut faire un switch sur des objets (des Actions) en Java.
+
+<b>Réponse:</b>

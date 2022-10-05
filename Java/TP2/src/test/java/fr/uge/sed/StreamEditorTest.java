@@ -264,7 +264,7 @@ public class StreamEditorTest {
       );
     }
   }
-/*
+
   @Nested
   public class Q6 {
     @Test
@@ -296,7 +296,6 @@ public class StreamEditorTest {
       assertTrue(action.isSealed());
     }
   }
-
 
   @Nested
   public class Q8 {
@@ -336,7 +335,7 @@ public class StreamEditorTest {
     }
   }
 
-
+/*
   @Nested
   public class Q9 {
     @Test
