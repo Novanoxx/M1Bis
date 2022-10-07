@@ -2,23 +2,22 @@ package fr.uge.slice;
 
 import java.util.Arrays;
 import java.util.Objects;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
-sealed interface Slice<E> permits Slice.ArraySlice, Slice.SubArraySlice {
-    static <E> Slice<E> array(E[] array) {
+sealed interface Slice3<E> permits Slice3.ArraySlice, Slice3.SubArraySlice {
+    static <E> Slice3<E> array(E[] array) {
         Objects.requireNonNull(array);
         return new ArraySlice<>(array);
     }
-
-    static <E> Slice<E> array(E[] array, int from, int to) {
+/*
+    static <E> Slice3<E> array(E[] array, int from, int to) {
         Objects.requireNonNull(array);
         return new SubArraySlice<>(array, from, to);
     }
+ */
     int size();
     E get(int index);
-    Slice<E> subSlice(int from, int to);
-   final class ArraySlice<T> implements Slice<T> {
+    //Slice3<E> subSlice(int from, int to);
+   final class ArraySlice<T> implements Slice3<T> {
         private final T[] lst;
         private ArraySlice(T[] array) {
             this.lst = array;
@@ -32,11 +31,12 @@ sealed interface Slice<E> permits Slice.ArraySlice, Slice.SubArraySlice {
         public T get(int index) {
            return lst[index];
        }
-
+    /*
         @Override
-        public Slice<T> subSlice(int from, int to) {
+        public Slice3<T> subSlice(int from, int to) {
             return new SubArraySlice<>(lst, from, to);
         }
+     */
 
         @Override
         public String toString() {
@@ -44,7 +44,7 @@ sealed interface Slice<E> permits Slice.ArraySlice, Slice.SubArraySlice {
        }
    }
 
-   final class SubArraySlice<U> implements Slice<U> {
+   final class SubArraySlice<U> implements Slice3<U> {
        private final U[] lst;
        private final int from;
        private final int to;
@@ -67,7 +67,7 @@ sealed interface Slice<E> permits Slice.ArraySlice, Slice.SubArraySlice {
        }
 
        @Override
-       public Slice<U> subSlice(int from, int to) {
+       public Slice3<U> subSlice(int from, int to) {
            Objects.checkFromToIndex(from, to, lst.length);
            if (size() < to - from) {
                throw new IndexOutOfBoundsException();
