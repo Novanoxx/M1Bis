@@ -187,4 +187,57 @@ On se propose pour cela de remplacer l'enum Action par une interface et DELETE e
    <br>Vérifier que les tests JUnit marqués "Q7" passent.
    <br>Rappel : on peut faire un switch sur des objets (des Actions) en Java.
 
+<b>Réponse:</b> J'ai ajouté le code donné dans la classe StreamEditor et rajouté sealed a l'interface en présage de la prochaine question.
+```
+private sealed interface Action {
+   record DeleteAction() implements Action {}
+   record PrintAction(String text) implements Action {}
+}
+```
+
+8. Écrire le code de la méthode substitute et vérifier que les tests JUnit marqués "Q8" passent.
+
 <b>Réponse:</b>
+```
+public static Command substitute(Pattern pattern, String replace) {
+   Objects.requireNonNull(pattern);
+   Objects.requireNonNull(replace);
+   return (current, numLine) -> pattern.matcher(current).find() ? new Action.PrintAction(pattern.matcher(current).replaceAll(replace)) : new Action.PrintAction(current);
+}
+```
+9. Non traité
+
+
+10. Enfin, on peut vouloir combiner plusieurs commandes en ajoutant une méthode andThen à Command tel que le code suivant fonctionne.
+      ```
+      var command1 = StreamEditor.substitute(Pattern.compile("foo"), "hello");
+      var command2 = StreamEditor.findAndDelete(Pattern.compile("baz"));
+      var editor = new StreamEditor(command1.andThen(command2));
+      editor.transform(reader), writer);
+      ```
+      andThen doit appliquer la première commande puis la seconde (dans cet ordre).
+      <br>Modifier Command pour introduire la méthode d'instance andThen.
+      <br>Vérifier que les tests JUnit marqués "Q10" passent.
+
+<b>Réponse:</b> Pour pouvoir ajouter une méthode dans l'interface fonctionnel Action, je n'ai pas eu le choix de préciser que
+la méthode andThen() soit une méthode default car une interface fonctionnel n'a seulement qu'une seule méthode abstraite.
+```
+@FunctionalInterface
+public interface Command {
+   Action action(String current, int numLine);
+   default Command andThen(Command cmd) {
+      Objects.requireNonNull(cmd);
+      return (current, numLine) -> switch(action(current, numLine)) {
+                                      case Action.PrintAction act -> cmd.action(act.text, numLine);   //Do the other command
+                                      case Action.DeleteAction act -> act;    //Do nothing
+                                  };
+      };
+}
+```
+
+
+11. En conclusion, dans quel cas, à votre avis, va-t-on utiliser des records pour implanter de différentes façons une interface et dans quel cas va-t-on utiliser des lambdas ?
+
+<b>Réponse:</b> A mon avis, l'intérêt des records et des lambdas se trouve dans la complexité des objets que l'on veut créer.
+Si l'objet voulu possède uniquement une méthode utilisée, alors les lambdas seront à priviligier. Dans le cas d'un objet
+ayant plusieurs utilité ou fonctionnement (possède plusieurs méthodes), alors les records seront à priviligier

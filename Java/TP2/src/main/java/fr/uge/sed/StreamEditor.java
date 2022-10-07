@@ -11,6 +11,13 @@ public class StreamEditor {
     @FunctionalInterface
     public interface Command {
         Action action(String current, int numLine);
+        default Command andThen(Command cmd) {
+            Objects.requireNonNull(cmd);
+            return (current, numLine) -> switch(action(current, numLine)) {
+                                            case Action.PrintAction act -> cmd.action(act.text, numLine);   //Do the other command
+                                            case Action.DeleteAction act -> act;    //Do nothing
+                                        };
+            };
     }
 
     private sealed interface Action {

@@ -351,7 +351,7 @@ public class StreamEditorTest {
       assertTrue(deleteAction.isEnum());
     }
   }
-
+*/
 
   @Nested
   public class Q10 {
@@ -430,6 +430,5 @@ public class StreamEditorTest {
       assertThrows(NullPointerException.class, () -> StreamEditor.lineDelete(10).andThen(null));
     }
   }
- */
 
 }
