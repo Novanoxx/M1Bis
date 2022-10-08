@@ -11,7 +11,7 @@ sealed interface Slice2<E> permits Slice2.ArraySlice, Slice2.ArraySlice.SubArray
 
     static <E> Slice2<E> array(E[] array, int from, int to) {
         Objects.requireNonNull(array);
-        return new ArraySlice.SubArraySlice(array, from, to);
+        return new ArraySlice.SubArraySlice<>(array, from, to);
     }
     int size();
     E get(int index);

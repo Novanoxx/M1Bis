@@ -115,6 +115,6 @@ public Slice<U> subSlice(int from, int to) {
 
 ## Exercice 3 - 2 Slice 2 Furious
 4. Dans quel cas va-t-on utiliser une inner class plutôt qu'une classe interne ? 
-<b>Réponse:</b> Demander a Forax
+<b>Réponse:</b> 
 
 ## Exercice 4 - The Slice and The Furious: Tokyo Drift

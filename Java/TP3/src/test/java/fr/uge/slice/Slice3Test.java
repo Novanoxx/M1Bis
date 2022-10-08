@@ -104,7 +104,6 @@ public class Slice3Test {
     }
   }
 
-/*
   @Nested
   public class Q3 {
     @Test
@@ -374,6 +373,4 @@ public class Slice3Test {
       assertEquals("[null]", "" + slice);
     }
   }
-
- */
 }
