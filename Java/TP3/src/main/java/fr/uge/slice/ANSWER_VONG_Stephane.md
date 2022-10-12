@@ -115,6 +115,9 @@ public Slice<U> subSlice(int from, int to) {
 
 ## Exercice 3 - 2 Slice 2 Furious
 4. Dans quel cas va-t-on utiliser une inner class plutôt qu'une classe interne ? 
-<b>Réponse:</b> 
+<b>Réponse:</b> On va utiliser une inner class dans le cas où la classe B dans la classe A n'est pas utilisé ailleurs que dans
+la classe A.
 
 ## Exercice 4 - The Slice and The Furious: Tokyo Drift
+3. Dans quel cas va-t-on utiliser une classe anonyme plutôt qu'une classe interne ?
+<b>Réponse:</b> 

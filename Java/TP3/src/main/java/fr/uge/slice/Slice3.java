@@ -13,13 +13,11 @@ interface Slice3<E> {
             public E get(int index) {
                 return array[index];
             }
-
             @Override
             public Slice3<E> subSlice(int from, int to) {
                 Objects.checkFromToIndex(from, to, array.length);
                 return Slice3.array(array, from, to);
             }
-
             public String toString() {
                 return Arrays.toString(Arrays.stream(array).toArray());
             }
@@ -34,13 +32,11 @@ interface Slice3<E> {
             public int size() {
                 return to - from;
             }
-
             @Override
             public E get(int index) {
                 Objects.checkIndex(index, to - from) ;
                 return array[from + index];
             }
-
             @Override
             public Slice3<E> subSlice(int from2, int to2) {
                 Objects.checkFromToIndex(from2, to2, array.length);
