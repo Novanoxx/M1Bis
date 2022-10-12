@@ -9,7 +9,8 @@ import java.util.Objects;
  *
  * Commenter l'instruction Thread.sleep(1) dans la méthode get puis ré-exécuter le code.
  * Que se passe-t-il ? Expliquer où est le bug ?
- * Le programme ne se termine pas apres avoir trouvé un nombre premier.
+ * Le programme ne se termine pas apres avoir trouvé un nombre premier. Le bug se trouve dans la boucle while de la
+ * méthode get(). L'optimisation JIT empeche la vérification de la condition du while.
  */
 public class StupidRendezVous<V> {
   private V value;
