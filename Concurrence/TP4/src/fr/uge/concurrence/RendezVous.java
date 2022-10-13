@@ -10,7 +10,7 @@ public class RendezVous<V> {
         Objects.requireNonNull(value);
         synchronized (lock) {
             this.value = value;
-            lock.notify();
+            lock.notifyAll();
         }
     }
 

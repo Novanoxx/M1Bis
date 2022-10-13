@@ -9,20 +9,22 @@ public class BoundedSafeQueue<V> {
     private final int size;
 
     public BoundedSafeQueue(int size) {
-        if (size <= 0) {
-            throw new IllegalArgumentException("Cannot be negative or equal to 0");
+        synchronized (lock) {
+            if (size <= 0) {
+                throw new IllegalArgumentException("Cannot be negative or equal to 0");
+            }
+            this.size = size;
+            this.queue = new ArrayList<>(size);
         }
-        this.size = size;
-        this.queue = new ArrayList<>(size);
     }
     private void put(V value) throws InterruptedException {
         Objects.requireNonNull(value);
         synchronized (lock) {
-            while (queue.size() == this.size) {
+            while (queue.size() >= this.size) {
                 lock.wait();
             }
             queue.add(value);
-            lock.notify();
+            lock.notifyAll();
         }
     }
 
@@ -31,6 +33,7 @@ public class BoundedSafeQueue<V> {
             while (queue.isEmpty()) {
                 lock.wait();
             }
+            lock.notifyAll();
             return queue.remove(0);
         }
     }
