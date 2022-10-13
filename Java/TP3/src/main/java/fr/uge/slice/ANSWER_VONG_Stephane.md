@@ -120,4 +120,5 @@ la classe A.
 
 ## Exercice 4 - The Slice and The Furious: Tokyo Drift
 3. Dans quel cas va-t-on utiliser une classe anonyme plutôt qu'une classe interne ?
-<b>Réponse:</b> 
+<b>Réponse:</b> On va utiliser une classe anonyme dans le cas où on veut seulement redéfinir un comportement
+d'une classe ou interface déjà existante.
