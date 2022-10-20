@@ -41,6 +41,7 @@ public class Vote {
                 return computeWinner();
             }
             //map.computeIfAbsent(name, k -> );
+            //map.merge()
             map.putIfAbsent(name, 0);
             map.replace(name, map.get(name), map.get(name) + 1);
             countVote++;
