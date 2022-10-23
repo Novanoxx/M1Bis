@@ -14,6 +14,7 @@
    Une fois que vous avez répondu à toutes ces questions, écrire le code de sum et vérifier que le test nommé "testSum" passe. De plus, vérifier avec les tests de performance dans VectorComputationBenchMark (dé-commenter les annotations correspondantes) que votre code est plus efficace qu'une simple boucle.
    Rappel : pour lancer les tests JMH, il suffit d'exécuter java -jar target/benchmarks.jar dans un terminal (et arrêter tout les programmes qui tournent !).
 
+
    <b>Réponse:</b>
    - intVector.
    - un VectorSpecies permet de dériver un type de vecteur et un nombre de lanes. On utilisera IntVector.SPECIES_128.
@@ -24,4 +25,98 @@
    - for(; i < length; i++) { // post loop
      newArray[i] = array[i];
      }
-2. 
+
+      ```
+      public static int sum(int[] array) {
+         var v1 = IntVector.zero(SPECIES);
+         var length = array.length;
+         var loopBound = length - length % SPECIES.length();
+         int i = 0;
+         for(; i < loopBound; i += SPECIES.length()) {
+            var v2 = IntVector.fromArray(SPECIES, array, i);
+            v1 = v1.add(v2);
+         }
+         var sum = v1.reduceLanes(VectorOperators.ADD);
+         for(; i < length; i++) { // post loop
+            sum += array[i];
+         }
+         return sum;
+      }
+      ```
+     
+   2. On souhaite écrire une méthode sumMask qui évite d'utiliser une post-loop et utilise un mask à la place.
+      <br>- Comment peut-on faire une addition de deux vecteurs avec un mask ?
+      <br>- Comment faire pour créer un mask qui allume les bits entre i la variable de boucle et length la longueur du tableau ?
+      <br>Écrire le code de la méthode sumMask et vérifier que le test "testSumMask" passe.
+      <br>Que pouvez vous dire en terme de performance entre sum et sumMask en utilisant les tests de performances JMH ?
+
+      <b>Réponse:</b>
+      - on transforme mask en vector correspondant puis on applique une opération lane-wise pour le calcul. Pour l'addition,
+        on utilisera add().
+      - ```var mask = SPECIES.indexInRange(i, length);```
+      sumMask est plus rapide dans le cas où le nombre de valeurs n'est pas trop grand.
+      ```
+      public static int sumMask(int[] array) {
+           var v1 = IntVector.zero(SPECIES);
+           var length = array.length;
+           var loopBound = length - length % SPECIES.length();
+           int i = 0;
+           for(; i < loopBound; i += SPECIES.length()) {
+               var v2 = IntVector.fromArray(SPECIES, array, i);
+               v1 = v1.add(v2);
+           }
+           var mask = SPECIES.indexInRange(i, length);
+           var mask_v = IntVector.fromArray(SPECIES, array, i, mask);
+           v1 = v1.add(mask_v);
+           return v1.reduceLanes(VectorOperators.ADD);
+       }
+      ```
+3. On souhaite maintenant écrire une méthode min qui calcule le minimum des valeurs d'un tableau en utilisant des vecteurs et une post-loop.
+   Contrairement à la somme qui a 0 comme élément nul, le minimum n'a pas d'élément nul... Quelle doit être la valeur utilisée pour initialiser de toute les lanes du vecteur avant la boucle principale ?
+   <br>Écrire le code de la méthode min, vérifier que le test nommé "testMin" passe et vérifier avec les tests JMH que votre code est plus efficace qu'une simple boucle sur les valeurs du tableau.
+   
+   <b>Réponse:</b>
+   La valeur qui doit être utilisé pour initialiser le vecteur est la valeur maximal : Integer.MAX_VALUES.
+   ```
+   public static int min(int[] array) {
+        var v1 = IntVector.broadcast(SPECIES, Integer.MAX_VALUE);
+        var length = array.length;
+        var loopBound = SPECIES.loopBound(length);
+        var i = 0;
+        for(; i < loopBound; i += SPECIES.length()) {
+            var v2 = IntVector.fromArray(SPECIES, array, i);
+            v1 = v1.min(v2);
+        }
+        for(; i < length; i++) { // post loop
+            v1 = v1.min(array[i]);
+        }
+        return v1.reduceLanes(VectorOperators.MIN);
+   }
+   ```
+   
+4. On souhaite enfin écrire une méthode minMask qui au lieu d'utiliser une post-loop comme dans le code précédent, utilise un mask à la place.
+   Attention, le minimum n'a pas d’élément nul (non, toujours pas !), donc on ne peut pas laisser des zéros "traîner" dans les llanes lorsque l'on fait un minimum sur deux vecteurs.
+   <br>Écrire le code de la méthode minMask et vérifier que le test nommé "testMinMask" passe.
+   <br>Que pouvez-vous dire en termes de performance entre min et minMask en utilisant les tests de performances JMH ?
+   
+   <b>Réponse:</b>
+   ```
+   public static int minMask(int[] array) {
+        var v1 = IntVector.broadcast(SPECIES, Integer.MAX_VALUE);
+        var length = array.length;
+        var loopBound = SPECIES.loopBound(length);
+        var i = 0;
+        for(; i < loopBound; i += SPECIES.length()) {
+            var v2 = IntVector.fromArray(SPECIES, array, i);
+            v1 = v1.min(v2);
+        }
+        var mask = SPECIES.indexInRange(i, length);
+        var mask_v = IntVector.fromArray(SPECIES,array, i, mask);
+        v1 = v1.lanewise(VectorOperators.MIN, mask_v, mask);
+        return v1.reduceLanes(VectorOperators.MIN);
+   }
+   ```
+   minMask est plus rapide que min uniquement pour le 1er test.
+
+
+## Exercice 3 - FizzBuzz
