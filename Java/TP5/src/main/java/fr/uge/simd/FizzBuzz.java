@@ -5,16 +5,28 @@ import jdk.incubator.vector.IntVector;
 import java.util.Arrays;
 
 public class FizzBuzz {
-    public static int[] fizzBuzzVector128(int longueur) {
+    public static int[] fizzBuzzVector128(int length) {
         var species = IntVector.SPECIES_128;
+        var loopBound = species.loopBound(length);
+        for (int i = 0; i < loopBound; i += species.length()) {
+
+        }
     }
 
-    public static int[] fizzBuzzVector256(int longueur) {
+    public static int[] fizzBuzzVector256(int length) {
         var species = IntVector.SPECIES_256;
+        var loopBound = species.loopBound(length);
+        for (int i = 0; i < loopBound; i += species.length()) {
+
+        }
     }
 
-    public static int[] fizzBuzzVector128AddMask(int longueur) {
+    public static int[] fizzBuzzVector128AddMask(int length) {
         var species = IntVector.SPECIES_128;
+        var loopBound = species.loopBound(length);
+        for (int i = 0; i < loopBound; i += species.length()) {
+
+        }
     }
 
     public static void main(String[] args) {
