@@ -17,7 +17,16 @@ public class Application {
 		}
 		*/
 		var heat = new ThreadSafeHeat(rooms.size());
-		heat.initThread(rooms);
+		//heat.initThread(rooms);
+		for (String room : rooms) {
+			Thread.ofPlatform().start(() -> {
+				try {
+					heat.retrieveTemperature(room, Heat4J.retrieveTemperature(room));
+				} catch (InterruptedException e) {
+					throw new RuntimeException(e);
+				}
+			});
+		}
 		System.out.println(heat.getAverage());
 	}
 }

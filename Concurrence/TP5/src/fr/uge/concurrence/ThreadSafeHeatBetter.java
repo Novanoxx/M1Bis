@@ -24,15 +24,15 @@ public class ThreadSafeHeatBetter {
             }
         }
 
-        public void retrieveTemperature(String room) throws InterruptedException {
+        public void retrieveTemperature(String room, int celcius) throws InterruptedException {
             synchronized (lock) {
                 while (value == State.WAIT) {
-                    lock.wait();
                     if (lstCheck[number] == 0) {
                         value = State.FREE;
+                    } else {
+                        lock.wait();
                     }
                 }
-                var celcius = Heat4J.retrieveTemperature(room);
                 System.out.println("Temperature in room " + room + " : " + celcius);
                 celciusRooms.add(celcius);
                 lstCheck[number] = 1;
@@ -43,10 +43,12 @@ public class ThreadSafeHeatBetter {
     }
 
     public ThreadSafeHeatBetter(int length) {
-        this.celciusRooms = new ArrayList<>(length);
         this.roomsSize = length;
-        this.lstCheck = new int[length];
-        Arrays.fill(lstCheck, 0);
+        synchronized (lock) {
+            celciusRooms = new ArrayList<>(length);
+            lstCheck = new int[length];
+            Arrays.fill(lstCheck, 0);
+        }
     }
 
     public double getAverage() throws InterruptedException {
@@ -61,21 +63,9 @@ public class ThreadSafeHeatBetter {
         }
     }
 
-    public void initThread(List<String> rooms) {
-        int i = 0;
-        for (String room : rooms) {
-            int j = i;
-            Thread.ofPlatform().start(() -> {
-                try {
-                    var thread = new ThreadRoom(j);
-                    while(true) {
-                        thread.retrieveTemperature(room);
-                    }
-                } catch (InterruptedException e) {
-                    throw new RuntimeException(e);
-                }
-            });
-            i++;
+    public ThreadRoom createThread(int num) {
+        synchronized (lock) {
+            return new ThreadRoom(num);
         }
     }
 }
