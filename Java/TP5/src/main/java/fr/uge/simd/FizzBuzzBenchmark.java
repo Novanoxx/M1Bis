@@ -48,21 +48,23 @@ public class FizzBuzzBenchmark {
     blackhole.consume(result);
   }
 
-  //@Benchmark
+  @Benchmark
   public void fizzbuzz_vector128(Blackhole blackhole) {
     var result = FizzBuzz.fizzBuzzVector128(1_000);
     blackhole.consume(result);
   }
 
-  //@Benchmark
+  @Benchmark
   public void fizzbuzz_vector256(Blackhole blackhole) {
     var result = FizzBuzz.fizzBuzzVector256(1_000);
     blackhole.consume(result);
   }
-
+/*
   //@Benchmark
   public void fizzbuzz_vector128_addmask(Blackhole blackhole) {
     var result = FizzBuzz.fizzBuzzVector128AddMask(1_000);
     blackhole.consume(result);
   }
+
+ */
 }

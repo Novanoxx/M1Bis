@@ -50,7 +50,7 @@ public class FizzBuzzTest {
       assertArrayEquals(expected, result);
     }
   }
-
+/*
   @Nested
   public class Q3 {
     @ParameterizedTest
@@ -61,4 +61,6 @@ public class FizzBuzzTest {
       assertArrayEquals(expected, result);
     }
   }
+
+ */
 }
