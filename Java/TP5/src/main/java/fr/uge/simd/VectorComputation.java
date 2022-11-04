@@ -38,6 +38,32 @@ public class VectorComputation {
     }
 
     public static int min(int[] array) {
-        var v1 = IntVector.zero(SPECIES).
+        var v1 = IntVector.broadcast(SPECIES, Integer.MAX_VALUE);
+        var length = array.length;
+        var loopBound = SPECIES.loopBound(length);
+        var i = 0;
+        for(; i < loopBound; i += SPECIES.length()) {
+            var v2 = IntVector.fromArray(SPECIES, array, i);
+            v1 = v1.min(v2);
+        }
+        for(; i < length; i++) { // post loop
+            v1 = v1.min(array[i]);
+        }
+        return v1.reduceLanes(VectorOperators.MIN);
+    }
+
+    public static int minMask(int[] array) {
+        var v1 = IntVector.broadcast(SPECIES, Integer.MAX_VALUE);
+        var length = array.length;
+        var loopBound = SPECIES.loopBound(length);
+        var i = 0;
+        for(; i < loopBound; i += SPECIES.length()) {
+            var v2 = IntVector.fromArray(SPECIES, array, i);
+            v1 = v1.min(v2);
+        }
+        var mask = SPECIES.indexInRange(i, length);
+        var mask_v = IntVector.fromArray(SPECIES,array, i, mask);
+        v1 = v1.lanewise(VectorOperators.MIN, mask_v, mask);
+        return v1.reduceLanes(VectorOperators.MIN);
     }
 }

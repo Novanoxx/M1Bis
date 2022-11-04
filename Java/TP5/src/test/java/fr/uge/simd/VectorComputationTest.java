@@ -35,7 +35,7 @@ public class VectorComputationTest {
       assertEquals(expected, sum);
     }
   }
-/*
+
   @Nested
   public class Q3 {
 
@@ -60,5 +60,4 @@ public class VectorComputationTest {
       assertEquals(expected, min);
     }
   }
-*/
 }

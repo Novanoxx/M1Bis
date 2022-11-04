@@ -36,13 +36,13 @@ public class VectorComputationBenchmark {
 	public int sum_vector_array(Blackhole blackhole) {
 		return VectorComputation.sum(array);
 	}
-/*
-	//@Benchmark
+
+	@Benchmark
 	public int sum_vector_mask_array(Blackhole blackhole) {
 		return VectorComputation.sumMask(array);
 	}
 
-	//@Benchmark
+	@Benchmark
 	public int min_loop_array(Blackhole blackhole) {
 		int min = array[0];
 		for (var i = 1; i < array.length; i++) {
@@ -51,15 +51,13 @@ public class VectorComputationBenchmark {
 		return min;
 	}
 
-	//@Benchmark
+	@Benchmark
 	public int min_vector_array(Blackhole blackhole) {
 		return VectorComputation.min(array);
 	}
 
-	//@Benchmark
+	@Benchmark
 	public int min_vector_mask_array(Blackhole blackhole) {
 		return VectorComputation.minMask(array);
 	}
-
- */
 }
