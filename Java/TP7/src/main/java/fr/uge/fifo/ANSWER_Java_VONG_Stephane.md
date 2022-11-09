@@ -120,20 +120,41 @@ public boolean isEmpty() {
 <br>Quel doit être le type de retour de la méthode iterator() ?
 
 <b>Réponse:</b>
-Un itérateur est comme une boucle for sauf qu'on a le contrôle sur le "pointeur" (l'index choisi).
-
+Un itérateur est comme une boucle for sauf qu'on a le contrôle sur le "pointeur" (l'index choisi). On souhaiterait effectuer une opération sur chaque élément.
+iterator() envoie un Iterator\<E>
 
 9. Implanter la méthode iterator().
    <br>Note : ici, pour simplifier le problème, on considérera que l'itérateur ne peut pas supprimer des éléments pendant son parcours.
 
 <b>Réponse:</b>
-
+```
+public Iterator<E> iterator() {
+   return new Iterator<>() {
+      int it_head = head;
+      int it_count = count;
+      @Override
+      public boolean hasNext() {
+          return it_count >= 1;
+      }
+      
+      @Override
+      public E next() {
+          if (it_count == 0) {
+              throw new NoSuchElementException("No next element");
+          }
+          var elem = queue[it_head];
+          it_head = (it_head + 1) % queue.length;
+          it_count -= 1;
+          return elem;
+      }
+};
+```
 
 10. Rappeler à quoi sert l'interface Iterable.
     <br>Faire en sorte que votre file soit Iterable.
 
 <b>Réponse:</b>
-
+On impélemente juste Iterable\<E>
 
 ## Exercice 3 - ResizeableFifo
 1. Indiquer comment agrandir la file si celle-ci est pleine et que l'on veut doubler sa taille. Attention, il faut penser au cas où le début de la liste a un indice qui est supérieur à l'indice indiquant la fin de la file.

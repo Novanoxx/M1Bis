@@ -1,18 +1,15 @@
 package fr.uge.fifo;
 
-import java.util.Iterator;
-import java.util.NoSuchElementException;
-import java.util.Objects;
-import java.util.StringJoiner;
+import java.util.*;
 
-public class Fifo<E> implements Iterable<E>{
+public class ResizeableFifo<E> extends AbstractQueue<E> implements Iterable<E>{
     private int head;
     private int tail;
     private int count;
-    private final int capacity;
+    private int capacity;
     private E[] queue;
     @SuppressWarnings("unchecked")
-    public Fifo(int capacity) {
+    public ResizeableFifo(int capacity) {
         if (capacity <= 0) {
             throw new IllegalArgumentException("capacity must greater than 0");
         }
@@ -23,10 +20,21 @@ public class Fifo<E> implements Iterable<E>{
         this.queue = (E[]) new Object[capacity];
     }
 
-    public void offer(E value) {
+    @SuppressWarnings("unchecked")
+    private void doubleSize() {
+        capacity *= 2;
+        E[] copy = (E[]) new Object[capacity];
+        System.arraycopy(queue, head, copy, 0, count - head);
+        System.arraycopy(queue, 0, copy, tail, head);
+        queue = copy;
+        head = 0;
+        tail = count;
+    }
+
+    public boolean offer(E value) {
         Objects.requireNonNull(value);
         if (count == capacity) {
-            throw new IllegalStateException("queue is full");
+            doubleSize();
         }
         if (tail == capacity) {
             tail = 0;
@@ -34,10 +42,11 @@ public class Fifo<E> implements Iterable<E>{
         queue[tail] = value;
         tail++;
         count++;
+        return true;
     }
     public E poll() {
-        if (count == 0) {
-            throw new IllegalStateException("queue is empty");
+        if (isEmpty()) {
+            return null;
         }
         if (head == capacity) {
             head = 0;
@@ -46,6 +55,11 @@ public class Fifo<E> implements Iterable<E>{
         head++;
         count--;
         return res;
+    }
+
+    @Override
+    public E peek() {
+        return queue[head];
     }
 
     @Override
@@ -96,4 +110,5 @@ public class Fifo<E> implements Iterable<E>{
             }
         };
     }
+
 }

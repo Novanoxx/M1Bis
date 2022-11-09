@@ -147,7 +147,7 @@ public class FifoTest {
       assertEquals("[1, 2]", fifo.toString());
     }
   }
-/*
+
   @Nested
   public class Q7 {
 
@@ -325,7 +325,7 @@ public class FifoTest {
 
   }
 
-
+/*
   @Nested
   public class Q10 {
 
