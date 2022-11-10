@@ -162,6 +162,18 @@ On impélemente juste Iterable\<E>
    <br>Note: il existe les méthodes Arrays.copyOf et System.arraycopy.
 
 <b>Réponse:</b>
+On ajoute la méthode doubleSize() et on modifie les méthodes offer().
+```
+private void doubleSize() {
+   capacity *= 2;
+   E[] copy = (E[]) new Object[capacity];
+   System.arraycopy(queue, head, copy, 0, count - head);
+   System.arraycopy(queue, 0, copy, tail, head);
+   queue = copy;
+   head = 0;
+   tail = count;
+}
+```
 
 
 2. En fait, il existe déjà une interface pour les files dans le JDK appelée java.util.Queue.
@@ -171,4 +183,6 @@ On impélemente juste Iterable\<E>
    - quelles sont les méthodes que l'on peut supprimer.
 
 <b>Réponse:</b>
-
+La méthode supplémentaire a implanter est peek() d'AbstractQueue.
+La méthode dont l'implantation doit être modifiée est poll() car elle renvoie null au lieu de sortir un IllegalStateException.
+On peut en soit supprimer la méthode iterator puisqu'on a implémenté Iterable() qui a sa propre méthode iterator. 
