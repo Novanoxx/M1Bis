@@ -45,6 +45,9 @@ public class ThePriceIsRight {
                         isFull.await();
                     } catch (InterruptedException e) {
                         proposals[index] = Integer.MAX_VALUE;
+                        var min = Arrays.stream(proposals).min().orElseThrow();
+                        indexOfMin = IntStream.range(0, proposals.length).filter(i -> i == min).findFirst().orElse(-1);
+                        isFull.signalAll();
                     }
                 }
             } else {
