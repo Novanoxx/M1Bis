@@ -1,5 +1,5 @@
 ### VONG Stéphane (groupe apprenti 2)
-# TP6 Java 2022-2023
+# TP8 Java 2022-2023
 ## Exercice 2 - TimeSeries
 
 1. Dans un premier temps, on va créer une classe TimeSeries ainsi qu'un record Data à l'intérieur de la classe TimeSeries qui représente une paire contenant une valeur de temps (timestamp) et un élément (element).
