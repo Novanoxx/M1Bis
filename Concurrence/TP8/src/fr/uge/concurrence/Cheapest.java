@@ -34,4 +34,7 @@ public record Cheapest(String item, int timeoutMilliPerRequest) {
         var answer = agregator.retrieve();
         System.out.println(answer); // Optional[tortank@laredoute.fr : 219]
     }
+
+    // Si Request.ALL_SITES contient 1000 sites, combien de threads seront lancés simultanément. Est-ce bien raisonnable ?
+    // Il y aura 1000 threads lancés simultanément. Ce n'est pas raisonnable.
 }
