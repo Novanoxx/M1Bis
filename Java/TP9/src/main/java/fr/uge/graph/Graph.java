@@ -1,8 +1,12 @@
 package fr.uge.graph;
 
 import java.util.Iterator;
+import java.util.Objects;
 import java.util.Optional;
+import java.util.Spliterator;
+import java.util.function.IntConsumer;
 import java.util.stream.IntStream;
+import java.util.stream.StreamSupport;
 
 /**
  * An oriented graph with values on edges and not on nodes.
@@ -91,5 +95,33 @@ public interface Graph<T> {
    * @throws IndexOutOfBoundsException if src is
    *         not a valid vertex number
    */
-  IntStream neighborStream(int src);
+  default IntStream neighborStream(int src) {
+      //Objects.checkIndex(src, nodeCount);
+      var it = neighborIterator(src);
+      return StreamSupport.intStream(new Spliterator.OfInt() {
+        @Override
+        public OfInt trySplit() {
+          return null;
+        }
+
+        @Override
+        public long estimateSize() {
+          return Long.MAX_VALUE;
+        }
+
+        @Override
+        public int characteristics() {
+          return 0;
+        }
+
+        @Override
+        public boolean tryAdvance(IntConsumer action) {
+          if (it.hasNext()) {
+            action.accept(it.next());
+            return true;
+          }
+          return false;
+        }
+      }, false);
+  }
 }

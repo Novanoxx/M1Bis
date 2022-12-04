@@ -163,7 +163,7 @@ public IntStream neighborStream(int src) {
    <br>Déplacer neighborStream dans Graph et vérifier que les tests unitaires passent toujours.
 
 <b>Réponse :</b>
-...
+On fait un default pour avoir une méthode dans une interface.
 
 10. Expliquer le fonctionnement précis de la méthode remove de l'interface Iterator.
     <br>Implanter la méthode remove de l'itérateur.

@@ -77,37 +77,4 @@ final class MatrixGraph<E> implements Graph<E> {
             }
         };
     }
-
-    @Override
-    public IntStream neighborStream(int src) {
-        Objects.checkIndex(src, nodeCount);
-        var it = neighborIterator(src);
-        return StreamSupport.intStream(new Spliterator.OfInt() {
-            @Override
-            public OfInt trySplit() {
-                return null;
-            }
-
-            @Override
-            public long estimateSize() {
-                return Long.MAX_VALUE;
-            }
-
-            @Override
-            public int characteristics() {
-                return 0;
-            }
-
-            @Override
-            public boolean tryAdvance(IntConsumer action) {
-                if (it.hasNext()) {
-                    action.accept(it.next());
-                    return true;
-                }
-                return false;
-            }
-        }, false);
-    }
-
-
 }
