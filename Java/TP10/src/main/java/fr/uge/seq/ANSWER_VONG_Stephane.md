@@ -37,7 +37,7 @@ public class Seq<E> {
 System.out.println(seq);  // <78, 56, 34, 23>
 ```
 
-<b>Réponse: </br>
+<b>Réponse: </b>
 ```
 @Override
  public String toString() {
@@ -160,8 +160,68 @@ for(var value : seq) {
 ```
 
 <b>Réponse: </b>
+On implémente Iterable<E> et on override iterator.
+```
+ @Override
+ public Iterator<E> iterator() {
+     return new Iterator<E>() {
+         int it = 0;
+         @Override
+         public boolean hasNext() {
+             return it < size();
+         }
+
+         @Override
+         public E next() {
+             if (!hasNext()) {
+                 throw new NoSuchElementException("no more element in lst");
+             }
+             return mapper.apply(lst.get(it++));
+         }
+     };
+ }
 ```
 
-```
+8. Enfin, on souhaite implanter la méthode stream() qui renvoie un Stream des éléments du Seq. Pour cela, on va commencer par implanter un Spliterator que l'on peut construire à partir du Spliterator déjà existant de la liste (que l'on obtient avec la méthode List.spliterator()).
+   <br>Puis en utilisant la méthode StreamSupport.stream, créer un Stream à partir de ce Spliterator.
+   <br>Écrire la méthode stream().
 
-8. 
+<b>Réponse: </b>
+```
+ public Stream<E> stream() {
+     return StreamSupport.stream(spliterator(), false);
+ }
+
+ @Override
+ public Spliterator<E> spliterator() {
+     return spliterator(lst.spliterator());
+ }
+
+ private Spliterator<E> spliterator(Spliterator<?> self) {
+     if (self == null) {
+         return null;
+     }
+     return new Spliterator<E>() {
+         @Override
+         public boolean tryAdvance(Consumer<? super E> action) {
+             Objects.requireNonNull(action);
+             return self.tryAdvance(e -> action.accept(mapper.apply(e)));
+         }
+
+         @Override
+         public Spliterator<E> trySplit() {
+             return spliterator(self.trySplit());
+         }
+
+         @Override
+         public long estimateSize() {
+             return self.estimateSize();
+         }
+
+         @Override
+         public int characteristics() {
+             return self.characteristics() | IMMUTABLE | NONNULL;
+         }
+     };
+ }
+```
