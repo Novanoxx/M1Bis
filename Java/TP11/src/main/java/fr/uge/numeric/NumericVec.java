@@ -74,7 +74,7 @@ public class NumericVec<E> implements Iterable<E>{
 
     @Override
     public String toString() {
-        return Arrays.stream(interArray).limit(size).filter(Objects::nonNull).boxed().map(e -> from.apply(e).toString()).collect(Collectors.joining(", ", "[", "]"));
+        return Arrays.stream(interArray).limit(size).filter(Objects::nonNull).mapToObj(e -> from.apply(e).toString()).collect(Collectors.joining(", ", "[", "]"));
     }
 
     @Override
