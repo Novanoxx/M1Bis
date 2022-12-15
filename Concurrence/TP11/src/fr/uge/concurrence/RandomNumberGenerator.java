@@ -7,12 +7,12 @@ import java.util.HashSet;
 
 public class RandomNumberGenerator {
   private volatile long x;
-  private static final VarHandle COUNTER_HANDLE;
+  private static final VarHandle X_HANDLE;
 
   static {
     var lookup = MethodHandles.lookup();
     try {
-      COUNTER_HANDLE = lookup.findVarHandle(RandomNumberGenerator.class, "counter", long.class);
+      X_HANDLE = lookup.findVarHandle(RandomNumberGenerator.class, "x", long.class);
     } catch (NoSuchFieldException | IllegalAccessException e) {
       throw new AssertionError(e);
     }
@@ -24,12 +24,21 @@ public class RandomNumberGenerator {
     }
     x = seed;
   }
-  
-  public long next() {  // Marsaglia's XorShift
+
+  private static long updateLong(long x) {  // Marsaglia's XorShift (part 1)
     x ^= x >>> 12;
     x ^= x << 25;
     x ^= x >>> 27;
-    return x * 2685821657736338717L;
+    return x;
+  }
+
+  public long next() {  // Marsaglia's XorShift
+    for (;;) {
+      var x = this.x; // volatile read
+      if (X_HANDLE.compareAndSet(this, x, updateLong(x))) {
+        return x * 2685821657736338717L;
+      }
+    }
   }
   
   public static void main(String[] args) throws InterruptedException {
