@@ -44,6 +44,4 @@ private long[] interArray;
     public String toString() {
         return Arrays.stream(interArray).filter(Objects::nonNull).map(Object::toString).collect(Collectors.joining(", ", "[", "]"));
     }
-
-
 }
