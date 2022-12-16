@@ -1,16 +1,14 @@
 package fr.uge.numeric;
 
-import java.util.Arrays;
-import java.util.Iterator;
-import java.util.NoSuchElementException;
-import java.util.Objects;
+import java.util.*;
 import java.util.function.Function;
+import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
 public class NumericVec<E> implements Iterable<E>{
     private int size;
     private int capacity;
-    private long[] interArray;
+    private long[] internArray;
     private final Function<E, Long> into;
     private final Function<Long, E> from;
 
@@ -19,14 +17,14 @@ public class NumericVec<E> implements Iterable<E>{
         this.capacity = 16;
         this.into = v -> (Long) v;
         this.from = v -> (E) v;
-        this.interArray = new long[capacity];
+        this.internArray = new long[capacity];
     }
     private NumericVec(Function<E, Long> into, Function<Long, E> from) {
         this.size = 0;
         this.capacity = 16;
         this.into = into;
         this.from = from;
-        this.interArray = new long[capacity];
+        this.internArray = new long[capacity];
     }
 
     public static NumericVec<Long> longs(long... values) {
@@ -55,17 +53,17 @@ public class NumericVec<E> implements Iterable<E>{
 
     public void add(E value) {
         Objects.requireNonNull(value);
-        if (size == interArray.length) {
+        if (size == internArray.length) {
             this.capacity *= 2;
-            interArray = Arrays.copyOf(interArray, capacity);
+            internArray = Arrays.copyOf(internArray, capacity);
         }
-        this.interArray[size()] = into.apply(value);
+        this.internArray[size()] = into.apply(value);
         this.size++;
     }
 
     public E get(int index) {
         Objects.checkIndex(index, size());
-        return from.apply(this.interArray[index]);
+        return from.apply(this.internArray[index]);
     }
 
     public int size() {
@@ -74,7 +72,7 @@ public class NumericVec<E> implements Iterable<E>{
 
     @Override
     public String toString() {
-        return Arrays.stream(interArray).limit(size).filter(Objects::nonNull).mapToObj(e -> from.apply(e).toString()).collect(Collectors.joining(", ", "[", "]"));
+        return Arrays.stream(internArray).limit(size).filter(Objects::nonNull).mapToObj(e -> from.apply(e).toString()).collect(Collectors.joining(", ", "[", "]"));
     }
 
     @Override
@@ -97,5 +95,12 @@ public class NumericVec<E> implements Iterable<E>{
                 return get(current);
             }
         };
+    }
+
+    public void addAll(NumericVec<? extends E> seq) {
+        Objects.requireNonNull(seq);
+        for (int i = 0; i < seq.size; i++) {
+            add(seq.get(i));
+        }
     }
 }
