@@ -4,9 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="d15f9eb4-c1f1-4358-9f5f-361324a0f023" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/src/fr/uge/concurrence/BogusConcurrentSet.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/fr/uge/concurrence/ConcurrentSet.java" afterDir="false" />
+    <list default="true" id="d15f9eb4-c1f1-4358-9f5f-361324a0f023" name="Changes" comment="tp11 concu unfinished">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -109,8 +107,17 @@
       <updated>1671105354718</updated>
       <workItem from="1671224156523" duration="11000" />
       <workItem from="1671554724700" duration="2049000" />
-      <workItem from="1671568342330" duration="3280000" />
+      <workItem from="1671568342330" duration="3493000" />
+      <workItem from="1671632994595" duration="30000" />
     </task>
+    <task id="LOCAL-00001" summary="tp11 concu unfinished">
+      <created>1671571995764</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1671571995764</updated>
+    </task>
+    <option name="localTasksCounter" value="2" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -129,6 +136,8 @@
   </component>
   <component name="VcsManagerConfiguration">
     <option name="ADD_EXTERNAL_FILES_SILENTLY" value="true" />
+    <MESSAGE value="tp11 concu unfinished" />
+    <option name="LAST_COMMIT_MESSAGE" value="tp11 concu unfinished" />
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
     <SUITE FILE_PATH="coverage/TP11$LinkedListLockFree.ic" NAME="LinkedListLockFree Coverage Results" MODIFIED="1671109619150" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false">
