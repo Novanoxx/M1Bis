@@ -1,0 +1,9 @@
+<component name="libraryTable">
+  <library name="ClientLongSumVerbose">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/ClientLongSumVerbose.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>

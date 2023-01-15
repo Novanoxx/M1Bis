@@ -1,0 +1,9 @@
+<component name="libraryTable">
+  <library name="File2Hex">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/out/production/tp1/File2Hex.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>

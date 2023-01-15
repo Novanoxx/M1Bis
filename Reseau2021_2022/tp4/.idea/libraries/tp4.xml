@@ -1,0 +1,10 @@
+<component name="libraryTable">
+  <library name="tp4">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/ServerIdUpperCaseUDP.jar!/" />
+      <root url="jar://$PROJECT_DIR$/UDPProxy.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>

@@ -1,0 +1,11 @@
+<component name="libraryTable">
+  <library name="tp2">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/out/production/tp2/ServerEchoUDP.jar!/" />
+      <root url="jar://$PROJECT_DIR$/out/production/tp2/ServerUpperCaseUDP.jar!/" />
+      <root url="jar://$PROJECT_DIR$/out/production/tp2/ServerBetterUpperCaseUDP.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>
